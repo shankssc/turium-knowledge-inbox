@@ -22,6 +22,10 @@ function App() {
     setItems((prev) => [item, ...prev])
   }
 
+  function handleItemDeleted(id: number) {
+  setItems((prev) => prev.filter((item) => item.id !== id))
+}
+
   return (
     <div className="min-h-screen bg-neutral-50 text-neutral-900">
       <div className="mx-auto flex max-w-2xl flex-col gap-6 px-4 py-10">
@@ -36,7 +40,7 @@ function App() {
 
         <section>
           <h2 className="mb-2 text-sm font-medium text-neutral-700">Saved items</h2>
-          <ItemList items={items} isLoading={isLoadingItems} />
+          <ItemList items={items} isLoading={isLoadingItems} onItemDeleted={handleItemDeleted} />
         </section>
 
         <AskQuestion onAnswer={setQueryResult} />

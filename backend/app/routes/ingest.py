@@ -2,7 +2,7 @@
 import json
 import logging
 
-from fastapi import APIRouter
+from fastapi import APIRouter, HTTPException
 
 from app.chunking import chunk_text
 from app.database import get_cursor
@@ -60,3 +60,16 @@ def list_items() -> list[ItemResponse]:
         rows = cursor.execute(
             "SELECT * FROM items ORDER BY created_at DESC").fetchall()
     return [ItemResponse(**dict(row)) for row in rows]
+
+
+@router.delete("/items/{item_id}", status_code=204)
+def delete_item(item_id: int) -> None:
+    with get_cursor() as cursor:
+        row = cursor.execute(
+            "SELECT id FROM items WHERE id = ?", (item_id,)).fetchone()
+        if row is None:
+            raise HTTPException(
+                status_code=404, detail=f"Item {item_id} not found.")
+        cursor.execute("DELETE FROM items WHERE id = ?", (item_id,))
+
+    logger.info("item_deleted", extra={"item_id": item_id})

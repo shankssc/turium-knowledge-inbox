@@ -64,3 +64,11 @@ export async function askQuestion(question: string): Promise<QueryResponse> {
   })
   return handleResponse<QueryResponse>(response)
 }
+
+export async function deleteItem(id: number): Promise<void> {
+  const response = await fetch(`${API_BASE}/items/${id}`, { method: "DELETE" })
+  if (!response.ok) {
+    const body = await response.json().catch(() => null)
+    throw new Error(body?.detail || `Request failed with status ${response.status}`)
+  }
+}
