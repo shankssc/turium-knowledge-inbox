@@ -6,6 +6,7 @@ routers. Business logic lives in dedicated modules under app/.
 import logging
 
 from fastapi import FastAPI
+from fastapi.middleware.cors import CORSMiddleware
 
 from app.database import init_db
 from app.logging_config import configure_logging
@@ -19,6 +20,13 @@ app = FastAPI(
     title="AI Knowledge Inbox",
     description="Save notes/URLs, ask questions over them via a simple RAG pipeline.",
     version="0.1.0",
+)
+
+app.add_middleware(
+    CORSMiddleware,
+    allow_origins=["http://localhost:5173"],
+    allow_methods=["GET", "POST"],
+    allow_headers=["Content-Type"],
 )
 
 app.include_router(ingest_router)
