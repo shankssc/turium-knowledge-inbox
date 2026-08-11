@@ -1,9 +1,12 @@
 """Ingestion endpoint: save notes or fetched URL content."""
+import json
 import logging
 
 from fastapi import APIRouter
 
+from app.chunking import chunk_text
 from app.database import get_cursor
+from app.embeddings import embed_texts
 from app.schemas import IngestRequest, ItemResponse
 from app.url_fetcher import fetch_url_content
 
@@ -31,8 +34,23 @@ async def ingest(payload: IngestRequest) -> ItemResponse:
         row = cursor.execute(
             "SELECT * FROM items WHERE id = ?", (item_id,)).fetchone()
 
-    logger.info("item_ingested", extra={
-                "item_id": item_id, "source_type": source_type})
+    chunks = chunk_text(content)
+    if chunks:
+        vectors = embed_texts(chunks)
+        with get_cursor() as cursor:
+            cursor.executemany(
+                "INSERT INTO chunks (item_id, chunk_index, text, embedding) VALUES (?, ?, ?, ?)",
+                [
+                    (item_id, idx, chunk, json.dumps(vector))
+                    for idx, (chunk, vector) in enumerate(zip(chunks, vectors))
+                ],
+            )
+
+    logger.info(
+        "item_ingested",
+        extra={"item_id": item_id, "source_type": source_type,
+               "chunk_count": len(chunks)},
+    )
     return ItemResponse(**dict(row))
 
 
