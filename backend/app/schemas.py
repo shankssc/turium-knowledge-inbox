@@ -21,3 +21,26 @@ class ItemResponse(BaseModel):
     source_type: str
     source_url: str | None
     created_at: str
+
+
+class QueryRequest(BaseModel):
+    question: str
+
+    @model_validator(mode="after")
+    def non_empty_question(self) -> "QueryRequest":
+        if not self.question or not self.question.strip():
+            raise ValueError("Question must not be empty.")
+        return self
+
+
+class SourceSnippet(BaseModel):
+    item_id: int
+    source_type: str
+    source_url: str | None
+    text: str
+    score: float
+
+
+class QueryResponse(BaseModel):
+    answer: str
+    sources: list[SourceSnippet]
