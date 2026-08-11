@@ -7,6 +7,7 @@ import logging
 
 from fastapi import FastAPI
 
+from app.database import init_db
 from app.logging_config import configure_logging
 
 configure_logging()
@@ -27,4 +28,5 @@ def health_check() -> dict:
 
 @app.on_event("startup")
 def on_startup() -> None:
+    init_db()
     logger.info("app_startup")
