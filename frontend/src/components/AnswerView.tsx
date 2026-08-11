@@ -1,3 +1,5 @@
+import ReactMarkdown from "react-markdown"
+
 import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
 import type { QueryResponse } from "@/lib/api"
 
@@ -14,7 +16,9 @@ export function AnswerView({ result }: AnswerViewProps) {
         <CardTitle>Answer</CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col gap-3">
-        <p className="text-sm">{result.answer}</p>
+        <div className="prose prose-sm max-w-none text-neutral-900 prose-p:my-1 prose-ul:my-1 prose-strong:font-semibold">
+            <ReactMarkdown>{result.answer}</ReactMarkdown>
+        </div>
 
         {result.sources.length > 0 && (
           <div className="flex flex-col gap-2 border-t border-neutral-200 pt-3">
