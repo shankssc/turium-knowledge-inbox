@@ -34,3 +34,11 @@ async def ingest(payload: IngestRequest) -> ItemResponse:
     logger.info("item_ingested", extra={
                 "item_id": item_id, "source_type": source_type})
     return ItemResponse(**dict(row))
+
+
+@router.get("/items", response_model=list[ItemResponse])
+def list_items() -> list[ItemResponse]:
+    with get_cursor() as cursor:
+        rows = cursor.execute(
+            "SELECT * FROM items ORDER BY created_at DESC").fetchall()
+    return [ItemResponse(**dict(row)) for row in rows]
