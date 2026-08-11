@@ -10,6 +10,7 @@ import numpy as np
 from app.database import get_cursor
 
 TOP_K = 4
+MIN_SCORE = 0.35
 
 
 def retrieve_relevant_chunks(query_vector: list[float], top_k: int = TOP_K) -> list[dict]:
@@ -49,4 +50,5 @@ def retrieve_relevant_chunks(query_vector: list[float], top_k: int = TOP_K) -> l
         )
 
     scored.sort(key=lambda x: x["score"], reverse=True)
-    return scored[:top_k]
+    relevant = [chunk for chunk in scored if chunk["score"] >= MIN_SCORE]
+    return relevant[:top_k]

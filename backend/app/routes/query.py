@@ -18,9 +18,9 @@ def query(payload: QueryRequest) -> QueryResponse:
     relevant_chunks = retrieve_relevant_chunks(query_vector)
 
     if not relevant_chunks:
-        logger.info("query_no_items")
+        logger.info("query_no_relevant_chunks")
         return QueryResponse(
-            answer="You haven't saved anything yet. Add a note or URL first, then ask again.",
+            answer="I couldn't find anything in your saved items relevant to that question.",
             sources=[],
         )
 
