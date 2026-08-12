@@ -101,6 +101,10 @@ The assignment specifies `POST /ingest`, `GET /items`, `POST /query`. I added `D
 - Add a sentence/paragraph-aware chunker to fix the mid-word-splitting issue observed during testing.
 - Add readability-based content extraction for URLs instead of tag-stripping.
 
+## Testing approach
+
+No automated test suite — for a minimal demo app with no CI pipeline, I prioritized time on the RAG pipeline and tradeoff write-ups over test infrastructure. Instead, every endpoint was manually verified against its happy path and realistic failure modes during development: empty/malformed input, unreachable URLs, non-200 and non-HTML URL responses, multi-chunk retrieval on long notes, and the zero-relevant-results fallback. In a longer-lived version of this project, `pytest` coverage for `chunking.py` and `retrieval.py` (both pure functions, no I/O) would be the first tests I'd add, since they're the cheapest to test and the most likely to have subtle bugs.
+
 ## Debuggability
 
 - Structured JSON logging on all key events (`app_startup`, `item_ingested`, `item_deleted`, `query_answered`, `query_no_relevant_chunks`, plus warnings on URL fetch failures and LLM errors).
