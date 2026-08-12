@@ -3,6 +3,7 @@
 Kept intentionally thin: this file wires up the app, middleware, and
 routers. Business logic lives in dedicated modules under app/.
 """
+
 import logging
 
 from fastapi import FastAPI

@@ -1,14 +1,14 @@
-import ReactMarkdown from "react-markdown"
+import ReactMarkdown from "react-markdown";
 
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import type { QueryResponse } from "@/lib/api"
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import type { QueryResponse } from "@/lib/api";
 
 interface AnswerViewProps {
-  result: QueryResponse | null
+  result: QueryResponse | null;
 }
 
 export function AnswerView({ result }: AnswerViewProps) {
-  if (!result) return null
+  if (!result) return null;
 
   return (
     <Card>
@@ -16,13 +16,13 @@ export function AnswerView({ result }: AnswerViewProps) {
         <CardTitle>Answer</CardTitle>
       </CardHeader>
       <CardContent className="flex flex-col gap-3">
-        <div className="prose prose-sm max-w-none text-neutral-900 prose-p:my-1 prose-ul:my-1 prose-strong:font-semibold">
-            <ReactMarkdown>{result.answer}</ReactMarkdown>
+        <div className="prose prose-sm prose-p:my-1 prose-ul:my-1 prose-strong:font-semibold max-w-none text-neutral-900">
+          <ReactMarkdown>{result.answer}</ReactMarkdown>
         </div>
 
         {result.sources.length > 0 && (
           <div className="flex flex-col gap-2 border-t border-neutral-200 pt-3">
-            <span className="text-xs font-medium uppercase text-neutral-500">Sources</span>
+            <span className="text-xs font-medium text-neutral-500 uppercase">Sources</span>
             {result.sources.map((source, idx) => (
               <div key={idx} className="rounded-md bg-neutral-50 p-2 text-xs text-neutral-600">
                 <div className="mb-1 flex items-center justify-between">
@@ -34,7 +34,7 @@ export function AnswerView({ result }: AnswerViewProps) {
                     href={source.source_url}
                     target="_blank"
                     rel="noreferrer"
-                    className="underline break-all"
+                    className="break-all underline"
                   >
                     {source.source_url}
                   </a>
@@ -46,5 +46,5 @@ export function AnswerView({ result }: AnswerViewProps) {
         )}
       </CardContent>
     </Card>
-  )
+  );
 }

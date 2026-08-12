@@ -5,9 +5,10 @@ with no auth, so we don't need data to survive a server restart. A
 fresh `uvicorn` run always starts clean (see README for the tradeoff
 and what changes for a persistent/production setup).
 """
+
 import sqlite3
+from collections.abc import Iterator
 from contextlib import contextmanager
-from typing import Iterator
 
 DATABASE_URL = ":memory:"
 

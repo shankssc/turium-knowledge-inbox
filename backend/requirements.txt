@@ -39,6 +39,7 @@ python-multipart==0.0.32
 PyYAML==6.0.3
 regex==2026.7.19
 rich==15.0.0
+ruff==0.16.2
 safetensors==0.8.0
 scikit-learn==1.9.0
 scipy==1.18.0

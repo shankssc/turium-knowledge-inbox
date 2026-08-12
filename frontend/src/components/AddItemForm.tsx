@@ -1,43 +1,43 @@
-import { useState } from "react"
+import { useState } from "react";
 
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Textarea } from "@/components/ui/textarea"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { ingestNote, ingestUrl, type Item } from "@/lib/api"
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Textarea } from "@/components/ui/textarea";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { ingestNote, ingestUrl, type Item } from "@/lib/api";
 
-type Mode = "note" | "url"
+type Mode = "note" | "url";
 
 interface AddItemFormProps {
-  onItemAdded: (item: Item) => void
+  onItemAdded: (item: Item) => void;
 }
 
 export function AddItemForm({ onItemAdded }: AddItemFormProps) {
-  const [mode, setMode] = useState<Mode>("note")
-  const [text, setText] = useState("")
-  const [url, setUrl] = useState("")
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [mode, setMode] = useState<Mode>("note");
+  const [text, setText] = useState("");
+  const [url, setUrl] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const currentValue = mode === "note" ? text : url
-  const canSubmit = currentValue.trim().length > 0 && !isSubmitting
+  const currentValue = mode === "note" ? text : url;
+  const canSubmit = currentValue.trim().length > 0 && !isSubmitting;
 
   async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    if (!canSubmit) return
+    e.preventDefault();
+    if (!canSubmit) return;
 
-    setIsSubmitting(true)
-    setError(null)
+    setIsSubmitting(true);
+    setError(null);
 
     try {
-      const item = mode === "note" ? await ingestNote(text.trim()) : await ingestUrl(url.trim())
-      onItemAdded(item)
-      setText("")
-      setUrl("")
+      const item = mode === "note" ? await ingestNote(text.trim()) : await ingestUrl(url.trim());
+      onItemAdded(item);
+      setText("");
+      setUrl("");
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong while saving.")
+      setError(err instanceof Error ? err.message : "Something went wrong while saving.");
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
   }
 
@@ -92,5 +92,5 @@ export function AddItemForm({ onItemAdded }: AddItemFormProps) {
         </form>
       </CardContent>
     </Card>
-  )
+  );
 }

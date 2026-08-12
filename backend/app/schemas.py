@@ -1,4 +1,5 @@
 """Pydantic request/response models."""
+
 from pydantic import BaseModel, model_validator
 
 
@@ -11,7 +12,8 @@ class IngestRequest(BaseModel):
         provided = [v for v in (self.text, self.url) if v]
         if len(provided) != 1:
             raise ValueError(
-                "Provide exactly one of 'text' or 'url', not both or neither.")
+                "Provide exactly one of 'text' or 'url', not both or neither."
+            )
         return self
 
 

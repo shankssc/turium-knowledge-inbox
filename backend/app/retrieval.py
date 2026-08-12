@@ -3,6 +3,7 @@
 Computed fresh, in-memory, on every query. Fine at this scale
 (hundreds of chunks); see README for what changes at larger scale.
 """
+
 import json
 
 import numpy as np
@@ -13,7 +14,9 @@ TOP_K = 4
 MIN_SCORE = 0.35
 
 
-def retrieve_relevant_chunks(query_vector: list[float], top_k: int = TOP_K) -> list[dict]:
+def retrieve_relevant_chunks(
+    query_vector: list[float], top_k: int = TOP_K
+) -> list[dict]:
     with get_cursor() as cursor:
         rows = cursor.execute(
             """

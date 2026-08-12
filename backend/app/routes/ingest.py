@@ -1,4 +1,5 @@
 """Ingestion endpoint: save notes or fetched URL content."""
+
 import json
 import logging
 
@@ -31,8 +32,7 @@ async def ingest(payload: IngestRequest) -> ItemResponse:
             (content, source_type, source_url),
         )
         item_id = cursor.lastrowid
-        row = cursor.execute(
-            "SELECT * FROM items WHERE id = ?", (item_id,)).fetchone()
+        row = cursor.execute("SELECT * FROM items WHERE id = ?", (item_id,)).fetchone()
 
     chunks = chunk_text(content)
     if chunks:
@@ -48,8 +48,11 @@ async def ingest(payload: IngestRequest) -> ItemResponse:
 
     logger.info(
         "item_ingested",
-        extra={"item_id": item_id, "source_type": source_type,
-               "chunk_count": len(chunks)},
+        extra={
+            "item_id": item_id,
+            "source_type": source_type,
+            "chunk_count": len(chunks),
+        },
     )
     return ItemResponse(**dict(row))
 
@@ -57,19 +60,16 @@ async def ingest(payload: IngestRequest) -> ItemResponse:
 @router.get("/items", response_model=list[ItemResponse])
 def list_items() -> list[ItemResponse]:
     with get_cursor() as cursor:
-        rows = cursor.execute(
-            "SELECT * FROM items ORDER BY created_at DESC").fetchall()
+        rows = cursor.execute("SELECT * FROM items ORDER BY created_at DESC").fetchall()
     return [ItemResponse(**dict(row)) for row in rows]
 
 
 @router.delete("/items/{item_id}", status_code=204)
 def delete_item(item_id: int) -> None:
     with get_cursor() as cursor:
-        row = cursor.execute(
-            "SELECT id FROM items WHERE id = ?", (item_id,)).fetchone()
+        row = cursor.execute("SELECT id FROM items WHERE id = ?", (item_id,)).fetchone()
         if row is None:
-            raise HTTPException(
-                status_code=404, detail=f"Item {item_id} not found.")
+            raise HTTPException(status_code=404, detail=f"Item {item_id} not found.")
         cursor.execute("DELETE FROM items WHERE id = ?", (item_id,))
 
     logger.info("item_deleted", extra={"item_id": item_id})

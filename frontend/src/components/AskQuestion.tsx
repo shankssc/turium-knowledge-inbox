@@ -1,35 +1,35 @@
-import { useState } from "react"
+import { useState } from "react";
 
-import { Button } from "@/components/ui/button"
-import { Input } from "@/components/ui/input"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { askQuestion, type QueryResponse } from "@/lib/api"
+import { Button } from "@/components/ui/button";
+import { Input } from "@/components/ui/input";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { askQuestion, type QueryResponse } from "@/lib/api";
 
 interface AskQuestionProps {
-  onAnswer: (result: QueryResponse) => void
+  onAnswer: (result: QueryResponse) => void;
 }
 
 export function AskQuestion({ onAnswer }: AskQuestionProps) {
-  const [question, setQuestion] = useState("")
-  const [isSubmitting, setIsSubmitting] = useState(false)
-  const [error, setError] = useState<string | null>(null)
+  const [question, setQuestion] = useState("");
+  const [isSubmitting, setIsSubmitting] = useState(false);
+  const [error, setError] = useState<string | null>(null);
 
-  const canSubmit = question.trim().length > 0 && !isSubmitting
+  const canSubmit = question.trim().length > 0 && !isSubmitting;
 
   async function handleSubmit(e: React.FormEvent) {
-    e.preventDefault()
-    if (!canSubmit) return
+    e.preventDefault();
+    if (!canSubmit) return;
 
-    setIsSubmitting(true)
-    setError(null)
+    setIsSubmitting(true);
+    setError(null);
 
     try {
-      const result = await askQuestion(question.trim())
-      onAnswer(result)
+      const result = await askQuestion(question.trim());
+      onAnswer(result);
     } catch (err) {
-      setError(err instanceof Error ? err.message : "Something went wrong while asking.")
+      setError(err instanceof Error ? err.message : "Something went wrong while asking.");
     } finally {
-      setIsSubmitting(false)
+      setIsSubmitting(false);
     }
   }
 
@@ -53,5 +53,5 @@ export function AskQuestion({ onAnswer }: AskQuestionProps) {
         {error && <p className="mt-2 text-sm text-red-600">{error}</p>}
       </CardContent>
     </Card>
-  )
+  );
 }

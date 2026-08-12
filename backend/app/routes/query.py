@@ -1,4 +1,5 @@
 """Query endpoint: retrieval + LLM answer generation."""
+
 import logging
 
 from fastapi import APIRouter

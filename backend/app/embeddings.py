@@ -5,6 +5,7 @@ etc.) to keep this project cost-free to run and demo. Tradeoff:
 lower embedding quality than a hosted model, and this pulls in
 PyTorch as a dependency. See README for the full rationale.
 """
+
 import logging
 
 from sentence_transformers import SentenceTransformer

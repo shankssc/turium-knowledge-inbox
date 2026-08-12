@@ -1,30 +1,30 @@
-import { useEffect, useState } from "react"
+import { useEffect, useState } from "react";
 
-import { AddItemForm } from "@/components/AddItemForm"
-import { ItemList } from "@/components/ItemList"
-import { AskQuestion } from "@/components/AskQuestion"
-import { AnswerView } from "@/components/AnswerView"
-import { fetchItems, type Item, type QueryResponse } from "@/lib/api"
+import { AddItemForm } from "@/components/AddItemForm";
+import { ItemList } from "@/components/ItemList";
+import { AskQuestion } from "@/components/AskQuestion";
+import { AnswerView } from "@/components/AnswerView";
+import { fetchItems, type Item, type QueryResponse } from "@/lib/api";
 
 function App() {
-  const [items, setItems] = useState<Item[]>([])
-  const [isLoadingItems, setIsLoadingItems] = useState(true)
-  const [queryResult, setQueryResult] = useState<QueryResponse | null>(null)
+  const [items, setItems] = useState<Item[]>([]);
+  const [isLoadingItems, setIsLoadingItems] = useState(true);
+  const [queryResult, setQueryResult] = useState<QueryResponse | null>(null);
 
   useEffect(() => {
     fetchItems()
       .then(setItems)
       .catch(() => setItems([]))
-      .finally(() => setIsLoadingItems(false))
-  }, [])
+      .finally(() => setIsLoadingItems(false));
+  }, []);
 
   function handleItemAdded(item: Item) {
-    setItems((prev) => [item, ...prev])
+    setItems((prev) => [item, ...prev]);
   }
 
   function handleItemDeleted(id: number) {
-  setItems((prev) => prev.filter((item) => item.id !== id))
-}
+    setItems((prev) => prev.filter((item) => item.id !== id));
+  }
 
   return (
     <div className="min-h-screen bg-neutral-50 text-neutral-900">
@@ -48,7 +48,7 @@ function App() {
         <AnswerView result={queryResult} />
       </div>
     </div>
-  )
+  );
 }
 
-export default App
+export default App;

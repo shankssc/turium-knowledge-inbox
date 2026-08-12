@@ -4,6 +4,7 @@ Kept simple on purpose: stdlib logging with a JSON formatter is enough
 for a single-service, single-user app and avoids pulling in a logging
 framework we don't need.
 """
+
 import json
 import logging
 import sys

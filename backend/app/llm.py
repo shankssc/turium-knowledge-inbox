@@ -1,4 +1,5 @@
 """Answer generation via the Claude API."""
+
 import logging
 
 import anthropic
@@ -48,14 +49,15 @@ def generate_answer(question: str, context_chunks: list[str]) -> str:
     except anthropic.AuthenticationError:
         logger.error("llm_auth_error")
         raise HTTPException(
-            status_code=500, detail="Invalid or missing ANTHROPIC_API_KEY.")
+            status_code=500, detail="Invalid or missing ANTHROPIC_API_KEY."
+        )
     except anthropic.APIStatusError as exc:
         logger.error("llm_api_error", extra={"status": exc.status_code})
         raise HTTPException(
-            status_code=502, detail=f"LLM provider returned an error: {exc.status_code}")
+            status_code=502, detail=f"LLM provider returned an error: {exc.status_code}"
+        )
     except anthropic.APIConnectionError:
         logger.error("llm_connection_error")
-        raise HTTPException(
-            status_code=502, detail="Could not reach the LLM provider.")
+        raise HTTPException(status_code=502, detail="Could not reach the LLM provider.")
 
     return response.content[0].text

@@ -1,4 +1,5 @@
 """Server-side URL fetching and text extraction."""
+
 import logging
 
 import httpx
@@ -16,24 +17,25 @@ async def fetch_url_content(url: str) -> str:
     """
     try:
         async with httpx.AsyncClient(timeout=10.0, follow_redirects=True) as client:
-            response = await client.get(url, headers={"User-Agent": "AI-Knowledge-Inbox/0.1"})
+            response = await client.get(
+                url, headers={"User-Agent": "AI-Knowledge-Inbox/0.1"}
+            )
             response.raise_for_status()
     except httpx.TimeoutException:
         logger.warning("url_fetch_timeout", extra={"url": url})
-        raise HTTPException(
-            status_code=502, detail=f"Timed out fetching URL: {url}")
+        raise HTTPException(status_code=502, detail=f"Timed out fetching URL: {url}")
     except httpx.HTTPStatusError as exc:
-        logger.warning("url_fetch_http_error", extra={
-                       "url": url, "status": exc.response.status_code})
+        logger.warning(
+            "url_fetch_http_error",
+            extra={"url": url, "status": exc.response.status_code},
+        )
         raise HTTPException(
             status_code=502,
             detail=f"URL returned an error status ({exc.response.status_code}): {url}",
         )
     except httpx.RequestError as exc:
-        logger.warning("url_fetch_failed", extra={
-                       "url": url, "error": str(exc)})
-        raise HTTPException(
-            status_code=400, detail=f"Could not reach URL: {url}")
+        logger.warning("url_fetch_failed", extra={"url": url, "error": str(exc)})
+        raise HTTPException(status_code=400, detail=f"Could not reach URL: {url}")
 
     content_type = response.headers.get("content-type", "")
     if "text/html" not in content_type:
@@ -49,6 +51,7 @@ async def fetch_url_content(url: str) -> str:
     text = soup.get_text(separator=" ", strip=True)
     if not text:
         raise HTTPException(
-            status_code=400, detail=f"No readable text content found at: {url}")
+            status_code=400, detail=f"No readable text content found at: {url}"
+        )
 
     return text

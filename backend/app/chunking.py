@@ -13,7 +13,9 @@ CHUNK_SIZE = 500
 CHUNK_OVERLAP = 75
 
 
-def chunk_text(text: str, chunk_size: int = CHUNK_SIZE, overlap: int = CHUNK_OVERLAP) -> list[str]:
+def chunk_text(
+    text: str, chunk_size: int = CHUNK_SIZE, overlap: int = CHUNK_OVERLAP
+) -> list[str]:
     text = text.strip()
     if not text:
         return []
@@ -25,7 +27,7 @@ def chunk_text(text: str, chunk_size: int = CHUNK_SIZE, overlap: int = CHUNK_OVE
     step = chunk_size - overlap
     start = 0
     while start < len(text):
-        chunk = text[start: start + chunk_size].strip()
+        chunk = text[start : start + chunk_size].strip()
         if chunk:
             chunks.append(chunk)
         start += step
